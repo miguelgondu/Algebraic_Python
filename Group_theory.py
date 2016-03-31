@@ -4,7 +4,7 @@ class Pregroup:
 	need to be associative, modulative or invertive. Once those three
 	conditions are satisfied, a Pregroup can be also called as a group.
 	The set S = _set that the Pregroup object takes is a normal python set,
-	and the operation is a set of tuples of the form ((a,b), c), which
+	and the operation is a set of tuples of the form ((a,b), c) which
 	implies a*b=c, the operation must have for every pair of elements of S
 	the value of their operation. Otherwise an error is raised.
 
