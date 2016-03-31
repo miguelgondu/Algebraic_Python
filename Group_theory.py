@@ -10,7 +10,8 @@ class Pregroup:
 
 
 	This class commes with functions that determine whether or not the 
-	operation is associative, modulative or invertive.
+	operation is associative, modulative or invertive. (These last two
+	are not yet included, and they are a TO-DO)
 	'''
 
 	def __init__(self, _set, _operation):
