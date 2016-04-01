@@ -45,6 +45,18 @@ class Pregroup:
 		if Counter_of_pairs_with_operation_value < len(self.Pregroup_set) ** 2:
 			raise ValueError('There is a pair of elements without value in operation.')
 
+		# TO-DO: _operation might not be a function. Check that.
+
+		Counter_of_double_values = 0
+		for _tuple1 in self.Pregroup_operation:
+			for _tuple2 in self.Pregroup_operation:
+				if _tuple1[0] == _tuple2[0]:
+					if _tuple1[1] != _tuple2[1]:
+						Counter_of_double_values += 1
+
+		if Counter_of_double_values > 0:
+			raise ValueError('Operation is not a function.')
+
 	def printPregroupTable(self, string='*'):
 		'''
 		Prints the pregroup table.
@@ -69,12 +81,17 @@ class Pregroup:
 		else:
 			raise ValueError('Objects must belong to the pregroup.')
 				
-
 		for _tuple in self.Pregroup_operation:
 			if _tuple[0][0] == a and _tuple[0][1] == b:
 				return _tuple[1]
 
-	def isPregroupAssociative(self, Printing_flag):
+	def isPregroupAssociative(self, Printing_flag = False):
+		'''
+		We verify that (xy)z = x(yz) for every x,y and z in the set.
+
+		-Printing_flag: a Boolean value which determines whether the
+		script prints out every non-associative 3-tuple.
+		'''
 		Counter_of_associativeness = 0
 		for x in self.Pregroup_set:
 			for y in self.Pregroup_set:
@@ -89,6 +106,108 @@ class Pregroup:
 		elif Counter_of_associativeness == len(self.Pregroup_set) ** 3:
 			return True
 
+	def isPregroupModulative(self, Printing_flag = False):
+		'''
+		To check whether a pregroup is modulative or not, we verify that
+		there exists an element that leaves others unchanged and that said
+		element works for every element in the set.
+
+		-Printing_flag: is a boolean that determines whether the module
+		is printed on-screen.
+		'''
+		Module_flag = False
+		for element in self.Pregroup_set:
+			for _tuple in self.Pregroup_operation:
+				if _tuple[0][0] == element and _tuple[1] == element:
+					Module_flag = True
+					Module = _tuple[0][1]
+
+		if Module_flag:
+			Counter_of_changed_elements = 0
+			for element in self.Pregroup_set:
+				a = self.operate(element,Module)
+				b = self.operate(Module, element)
+				if element != a or element != b:
+					Counter_of_changed_elements += 1
+			if Counter_of_changed_elements > 0:
+				return False
+			else:
+				if Printing_flag:
+					print('Module: ' + str(Module))
+				return True
+		else:
+			return False
+
+	def getModule(self):
+		'''
+		To get the module, we first check if the pregroup is indeed
+		modulative, once it is modulative (and because we know a-priori
+		that the module is unique), we get one that satisfies the
+		definition.
+		'''
+		if self.isPregroupModulative(False):
+			for element in self.Pregroup_set:
+				for _tuple in self.Pregroup_operation:
+					if _tuple[0][0] == element and _tuple[1] == element:
+						Module_flag = True
+						Module = _tuple[0][1]
+			return Module
+		else:
+			raise RuntimeError('Pregroup is not modulative')
+
+	def isPregroupInvertible(self):
+		if self.isPregroupModulative(False):
+			List_of_inverses = []
+			e = self.getModule()
+			for element1 in self.Pregroup_set:
+				for element2 in self.Pregroup_set:
+					if self.operate(element1, element2) == e:
+						List_of_inverses.append((element1, element2))
+
+			Not_inversible_element_flag = False
+			for element in self.Pregroup_set:
+				appearences_of_element = 0
+				for _tuple in List_of_inverses:
+					if _tuple[0] == element or _tuple[1] == element:
+						appearences_of_element += 1
+				if appearences_of_element == 0:
+					Not_inversible_element_flag = True
+					
+			return not Not_inversible_element_flag
+		else:
+			print('The pregroup is not even modulative')
+			return False
+
+	def getInverse(self, element):
+		'''
+		This functions creates the set of inverses and gets one of the
+		inverses (which, by our theory, should be unique).
+		'''
+		if element not in self.Pregroup_set:
+			raise ValueError('Element is not in group')
+
+		if self.isPregroupInvertible():
+			List_of_inverses = []
+			e = self.getModule()
+			for element1 in self.Pregroup_set:
+				for element2 in self.Pregroup_set:
+					if self.operate(element1, element2) == e:
+						List_of_inverses.append((element1, element2))
+			for _tuple in List_of_inverses:
+				if _tuple[0] == element:
+					return _tuple[1]
+		else:
+			raise RuntimeError('Group is not invertible')
+
+	def isPregroupConmutative(self):
+		for element1 in self.Pregroup_set:
+			for element2 in self.Pregroup_set:
+				if self.operate(element1, element2) == self.operate(element2, element1):
+					return True
+				else:
+					return False
+
+
 class Group:
 	'''
 	A group object takes a set of elements and an operation. The set S =_set
@@ -97,13 +216,14 @@ class Group:
 	element from S, that is, a tuple ((a,b), c) implies that a*b = c in
 	the group.
 
-	TO-DO: 
+	TO-DO:  
 	- To check whether or not is the group well-defined, assert the creation
 	  of a pregroup that must be associative, modulative and invertive.
 	- how can I check that _operation is defined with elements in S?
 	- Create a function that generates (Zn, +) and other usual groups
 	  -- Create an arithmetic on Zn which recognizes equivalence classes
 	- Is it possible to work with infinite groups?
+	- Think bigger: group actions and permutations
 	'''
 	
 	def __init__(self, _set, _operation):
@@ -123,8 +243,7 @@ class Group:
 			pass
 		else:
 			raise ValueError('Objects must belong to the group.')
-				
-
+			
 		for _tuple in self.Group_operation:
 			if _tuple[0][0] == a and _tuple[0][1] == b:
 				return _tuple[1]
@@ -154,6 +273,3 @@ class Group:
 			return False
 		elif Counter_of_non_abelian_pairs == 0:
 			return True
-
-
-						
