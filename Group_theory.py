@@ -1,3 +1,18 @@
+'''
+Group_theory.py, by MGD.
+
+In this file, the main objects of group theory are defined:
+- A pregroup is a set with an operation, said operation may not even be
+  associative, nor modulative or inverible. But it does have to be
+  defined on the set that is passed. 
+- A group is a set with an operation that is indeed associative,
+  modulative and invertible.
+For more information, check the documentation of each object.
+
+TO-DO:
+ - Create a function that translates a csv file into an operation.
+'''
+
 class Pregroup:
 	'''
 	A Pregroup is just a set with an operation. The operation doesn't
@@ -22,9 +37,7 @@ class Pregroup:
 		if type(self.Pregroup_set) != type({0,1}) or type(self.Pregroup_operation) != type({0,1}):
 			raise ValueError('Both arguments should be sets.')
 
-
 		# Checking if the operation is correctly defined
-
 		for _tuple in self.Pregroup_operation:
 			if _tuple[0][0] not in self.Pregroup_set:
 				raise ValueError('Elements in operation should belong to the set.')
@@ -34,7 +47,6 @@ class Pregroup:
 				raise ValueError('Elements in operation should belong to the set.')
 
 		# Checking if there's a value for every possible pair
-
 		Counter_of_pairs_with_operation_value = 0
 		for element1 in self.Pregroup_set:
 			for element2 in self.Pregroup_set:
@@ -57,6 +69,19 @@ class Pregroup:
 		if Counter_of_double_values > 0:
 			raise ValueError('Operation is not a function.')
 
+	def getPregroupSet(self):
+		'''
+		Returns the underlying set of the Pregroup.
+		'''
+		return self.Pregroup_set
+
+	def getPregroupOrder(self):
+		'''
+		Returns the amount of elements in the underlying set of 
+		the pregroup 
+		'''
+		return len(self.Pregroup_set)
+
 	def printPregroupTable(self, string='*'):
 		'''
 		Prints the pregroup table.
@@ -76,6 +101,10 @@ class Pregroup:
 			print()
 
 	def operate(self, a, b):
+		'''
+		Returns the result of operating element a and b in that order.
+		The elements a and b must belong to the Pregroup set.
+		'''
 		if a in self.Pregroup_set and b in self.Pregroup_set:
 			pass
 		else:
@@ -87,6 +116,9 @@ class Pregroup:
 
 	def isPregroupAssociative(self, Printing_flag = False):
 		'''
+		Returns a boolean stating whether or not the Pregroup's
+		operation is associative or not.
+
 		We verify that (xy)z = x(yz) for every x,y and z in the set.
 
 		-Printing_flag: a Boolean value which determines whether the
@@ -108,6 +140,9 @@ class Pregroup:
 
 	def isPregroupModulative(self, Printing_flag = False):
 		'''
+		Returns a boolean: True if the Pregroup is modulative and
+		False if the pregroup isn't.
+
 		To check whether a pregroup is modulative or not, we verify that
 		there exists an element that leaves others unchanged and that said
 		element works for every element in the set.
@@ -140,10 +175,13 @@ class Pregroup:
 
 	def getModule(self):
 		'''
+		Returns the module of the operation, if the operation is
+		modulative.
+
 		To get the module, we first check if the pregroup is indeed
 		modulative, once it is modulative (and because we know a-priori
-		that the module is unique), we get one that satisfies the
-		definition.
+		that the module is unique), we get one element that satisfies
+		the definition.
 		'''
 		if self.isPregroupModulative(False):
 			for element in self.Pregroup_set:
@@ -156,6 +194,10 @@ class Pregroup:
 			raise RuntimeError('Pregroup is not modulative')
 
 	def isPregroupInvertible(self):
+		'''
+		Returns a boolean: True if the Pregroup's operation is invertible
+		and False if the Pregroup's operation isn't. 
+		'''
 		if self.isPregroupModulative(False):
 			List_of_inverses = []
 			e = self.getModule()
@@ -180,8 +222,13 @@ class Pregroup:
 
 	def getInverse(self, element):
 		'''
+		Returns the inverse of an element, if it exists.
+
 		This functions creates the set of inverses and gets one of the
 		inverses (which, by our theory, should be unique).
+
+		TODO:
+		- What if there's a set with only a couple invertible elements?
 		'''
 		if element not in self.Pregroup_set:
 			raise ValueError('Element is not in group')
@@ -197,9 +244,13 @@ class Pregroup:
 				if _tuple[0] == element:
 					return _tuple[1]
 		else:
-			raise RuntimeError('Group is not invertible')
+			raise RuntimeError('Pregroup is not invertible')
 
 	def isPregroupConmutative(self):
+		'''
+		Returns a boolean which states whether or not the Pregroup is
+		conmutative.
+		'''
 		for element1 in self.Pregroup_set:
 			for element2 in self.Pregroup_set:
 				if self.operate(element1, element2) == self.operate(element2, element1):
@@ -217,9 +268,6 @@ class Group:
 	the group.
 
 	TO-DO:  
-	- To check whether or not is the group well-defined, assert the creation
-	  of a pregroup that must be associative, modulative and invertive.
-	- how can I check that _operation is defined with elements in S?
 	- Create a function that generates (Zn, +) and other usual groups
 	  -- Create an arithmetic on Zn which recognizes equivalence classes
 	- Is it possible to work with infinite groups?
@@ -231,14 +279,27 @@ class Group:
 		self.Group_operation = _operation
 
 		G = Pregroup(_set, _operation)
+		if not G.isPregroupAssociative() or not G.isPregroupModulative or not G.isPregroupInvertible:
+			raise ValueError('The set with said operation is not a group')
 
 	def getGroupSet(self):
+		'''
+		Returns the underlying set of the group.
+		'''
 		return self.Group_set
 
 	def getGroupOrder(self):
+		'''
+		Returns the amount of elements in the underlying set
+		of the group.
+		'''
 		return len(self.Group_set)
 
 	def operate(self, a, b):
+		'''
+		Returns the result of operating a and b in that order. The
+		elements a and b must belong to the group.
+		'''
 		if a in self.Group_set and b in self.Group_set:
 			pass
 		else:
@@ -248,8 +309,13 @@ class Group:
 			if _tuple[0][0] == a and _tuple[0][1] == b:
 				return _tuple[1]
 
-	def printGroupTable(self):
-		print('* | ', end='')
+	def printGroupTable(self, string='*'):
+		'''
+		Prints the group's table operation.
+		TO-DO:
+		-Create a similar function that outputs this into a file.
+		'''
+		print(str(string) +' | ', end='')
 		for element in self.Group_set:
 				print(str(element) + ' | ', end='')
 		print()
@@ -262,6 +328,10 @@ class Group:
 			print()
 
 	def isGroupAbelian(self):
+		'''
+		Returns a boolean: True if the group is abelian and False if
+		the group isn't.
+		'''
 		Counter_of_non_abelian_pairs = 0
 		for _tuple1 in self.Group_operation:
 			for _tuple2 in self.Group_operation:
@@ -273,3 +343,36 @@ class Group:
 			return False
 		elif Counter_of_non_abelian_pairs == 0:
 			return True
+
+	def isGroupConmutative(self):
+		'''
+		Returns True if the group is abelian and False if it isn't.
+		'''
+		return self.isGroupAbelian()
+
+	def getModule(self):
+		'''
+		Returns the module of the group.
+		'''
+		for element in self.Group_set:
+			for _tuple in self.Group_operation:
+				if _tuple[0][0] == element and _tuple[1] == element:
+					Module = _tuple[0][1]
+		return Module
+
+	def getInverse(self, element):
+		'''
+		Returns the inverse of an element.
+		'''
+		if element not in self.Group_set:
+			raise ValueError('Element is not in the group.')
+		List_of_inverses = []
+		e = self.getModule()
+		for element1 in self.Group_set:
+			for element2 in self.Group_set:
+				if self.operate(element1, element2) == e:
+					List_of_inverses.append((element1, element2))
+		for _tuple in List_of_inverses:
+			if _tuple[0] == element:
+				return _tuple[1]
+

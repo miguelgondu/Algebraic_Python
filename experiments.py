@@ -15,12 +15,15 @@ def main():
 					}
 
 	Z3 = GT.Pregroup(Z3_set, Z3_operation)
+	Z3.printPregroupTable('+')
+	print('About Z3 = ' + str(Z3_set) +' we can answer: ')
 	print('Is Associative?: ' + str(Z3.isPregroupAssociative(False)))
 	print('Is Modulative?: ' + str(Z3.isPregroupModulative(False)))
 	print('Is Invertible?: ' + str(Z3.isPregroupInvertible()))
 	print('Is Conmutative?: ' + str(Z3.isPregroupConmutative()))
-	Z3.printPregroupTable('+')
 	print('The inverse of 1 is: ' + str(Z3.getInverse(1)))
+
+	Z3 = GT.Group(Z3_set, Z3_operation)
 	
 	#Vector_set = {' i', ' j', ' k', '-i', '-j', '-k', ' 0'}
 	#Vector_times = {((' i', ' i'), ' 0'),
