@@ -78,6 +78,10 @@ def main():
 					#}
 	#Vector_pregroup = GT.Pregroup(Vector_set, Vector_times)
 
+	Z5 = GT.getZn(5)
+	print('Z5 = ' + str(Z5.getGroupSet()))
+	Z5.printGroupTable('+')
+
 
 if __name__ == '__main__':
 	main()

@@ -11,6 +11,7 @@ For more information, check the documentation of each object.
 
 TO-DO:
  - Create a function that translates a csv file into an operation.
+ - Create group actions.
 '''
 
 class Pregroup:
@@ -246,6 +247,13 @@ class Pregroup:
 		else:
 			raise RuntimeError('Pregroup is not invertible')
 
+	def isPregroupGroup(self):
+		'''
+		Returns a boolean: True if the operation is associative, modulative
+		and invertible, False otherwise.
+		'''
+		return self.isPregroupAssociative() and self.isPregroupModulative() and self.isPregroupInvertible()
+
 	def isPregroupConmutative(self):
 		'''
 		Returns a boolean which states whether or not the Pregroup is
@@ -257,7 +265,6 @@ class Pregroup:
 					return True
 				else:
 					return False
-
 
 class Group:
 	'''
@@ -278,8 +285,11 @@ class Group:
 		self.Group_set = _set
 		self.Group_operation = _operation
 
+		if type(self.Group_set) != type({0,1}) or type(self.Group_operation) != type({0,1}):
+			raise ValueError('Both arguments should be sets.')
+
 		G = Pregroup(_set, _operation)
-		if not G.isPregroupAssociative() or not G.isPregroupModulative or not G.isPregroupInvertible:
+		if not G.isPregroupGroup:
 			raise ValueError('The set with said operation is not a group')
 
 	def getGroupSet(self):
@@ -376,3 +386,21 @@ class Group:
 			if _tuple[0] == element:
 				return _tuple[1]
 
+#Other functions
+
+#Creating a Zn
+
+def getZn(n):
+	'''
+	Returns the abelian group Zn, n must be a positive integer.
+	'''
+	if type(n) != type(1) or n<0:
+		raise ValueError('n must be a positive integer.')
+
+	_set = set(range(n))
+	_operation = []
+	for element1 in _set:
+	    for element2 in _set:
+	        _tuple = (element1, element2)
+	        _operation.append((_tuple, (element1+element2)% n))
+	return Group(_set, set(_operation))
