@@ -14,6 +14,8 @@ TO-DO:
  - Create group actions.
 '''
 
+import Set_theory as ST
+
 class Pregroup:
 	'''
 	A Pregroup is just a set with an operation. The operation doesn't
@@ -47,6 +49,17 @@ class Pregroup:
 			if _tuple[1] not in self.Pregroup_set:
 				raise ValueError('Elements in operation should belong to the set.')
 
+		_domain_list = []
+		for element1 in self.Pregroup_set:
+			for element2 in self.Pregroup_set:
+				_domain_list.append((element1, element2))
+		_domain = set(_domain_list)
+
+		# Checking if the operation is a function from GxG to G. 
+		if not ST.isRelationFunction(_domain, self.Pregroup_set, _operation):
+			raise ValueError('Operation is not a function.')
+
+
 		# Checking if there's a value for every possible pair
 		Counter_of_pairs_with_operation_value = 0
 		for element1 in self.Pregroup_set:
@@ -57,8 +70,6 @@ class Pregroup:
 
 		if Counter_of_pairs_with_operation_value < len(self.Pregroup_set) ** 2:
 			raise ValueError('There is a pair of elements without value in operation.')
-
-		# TO-DO: _operation might not be a function. Check that.
 
 		Counter_of_double_values = 0
 		for _tuple1 in self.Pregroup_operation:
