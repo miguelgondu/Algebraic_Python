@@ -59,28 +59,6 @@ class Pregroup:
 		if not ST.isRelationFunction(_domain, self.Pregroup_set, _operation):
 			raise ValueError('Operation is not a function.')
 
-
-		# Checking if there's a value for every possible pair
-		Counter_of_pairs_with_operation_value = 0
-		for element1 in self.Pregroup_set:
-			for element2 in self.Pregroup_set:
-				for _tuple in self.Pregroup_operation:
-					if _tuple[0][0] == element1 and _tuple[0][1] == element2:
-						Counter_of_pairs_with_operation_value += 1
-
-		if Counter_of_pairs_with_operation_value < len(self.Pregroup_set) ** 2:
-			raise ValueError('There is a pair of elements without value in operation.')
-
-		Counter_of_double_values = 0
-		for _tuple1 in self.Pregroup_operation:
-			for _tuple2 in self.Pregroup_operation:
-				if _tuple1[0] == _tuple2[0]:
-					if _tuple1[1] != _tuple2[1]:
-						Counter_of_double_values += 1
-
-		if Counter_of_double_values > 0:
-			raise ValueError('Operation is not a function.')
-
 	def getPregroupSet(self):
 		'''
 		Returns the underlying set of the Pregroup.
