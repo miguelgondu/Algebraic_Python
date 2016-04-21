@@ -17,29 +17,6 @@ TO-DO:
 import Set_theory as ST
 import csv
 
-def getOperationFromCSV(self, file_name):
-	'''
-	Returns an operation set from a csv file. Delimiters must be white
-	spaces.
-	'''
-	file_csv = csv.reader(open(file_name), delimiter = ' ')
-	file_matrix = []
-	for row in file_csv:
-		file_matrix.append(row)
-	order = len(file_matrix)
-
-	for row in file_matrix:
-		if len(row) != order:
-			raise ValueError('The csv file must form a square matrix')
-
-	_operation_list = []
-	for i in range(1, len(file_matrix)): 
-	    for j in range(1, len(file_matrix)):
-	        element = ((file_matrix[i][0], file_matrix[0][j]), file_matrix[i][j])
-	        _operation_list.append(element)
-
-	return set(_operation_list)
-
 class Pregroup:
 	'''
 	A Pregroup is just a set with an operation. The operation doesn't
@@ -88,6 +65,12 @@ class Pregroup:
 		Returns the underlying set of the Pregroup.
 		'''
 		return self.Pregroup_set
+
+	def getPregroupOperation(self):
+		'''
+		Returns the underlying operation of the Pregroup.
+		'''
+		return self.Pregroup_operation
 
 	def getPregroupOrder(self):
 		'''
@@ -313,6 +296,12 @@ class Group:
 		'''
 		return self.Group_set
 
+	def getGroupOperation(self):
+		'''
+		Returns the underlying set of the group.
+		'''
+		return self.Group_operation
+
 	def getGroupOrder(self):
 		'''
 		Returns the amount of elements in the underlying set
@@ -419,3 +408,36 @@ def getZn(n):
 	        _tuple = (element1, element2)
 	        _operation.append((_tuple, (element1+element2)% n))
 	return Group(_set, set(_operation))
+
+def getPregroupFromCSV(self, file_name):
+	'''
+	Returns an operation set from a csv file. Delimiters must be white
+	spaces.
+	'''
+	file_csv = csv.reader(open(file_name), delimiter = ' ')
+	file_matrix = []
+	for row in file_csv:
+		file_matrix.append(row)
+	order = len(file_matrix)
+
+	for row in file_matrix:
+		if len(row) != order:
+			raise ValueError('The csv file must form a square matrix')
+
+	_operation_list = []
+	for i in range(1, len(file_matrix)): 
+	    for j in range(1, len(file_matrix)):
+	        element = ((file_matrix[i][0], file_matrix[0][j]), file_matrix[i][j])
+	        _operation_list.append(element)
+
+	_domain_list = []
+	for element in file_matrix[0]:
+		if element != '*':
+			_domain_list.append(element)
+
+	return Pregroup(set(_domain_list), set(_operation_list))
+
+def getGroupFromCSV(self, file_name):
+	_Pregroup = getPregroupFromCSV(file_name)
+	if _Pregroup.isPregroupGroup():
+		return Group(_Pregroup.getPregroupSet(), _Pregroup.getPregroupOperation())
