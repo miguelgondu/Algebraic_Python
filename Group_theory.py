@@ -15,6 +15,30 @@ TO-DO:
 '''
 
 import Set_theory as ST
+import csv
+
+def getOperationFromCSV(self, file_name):
+	'''
+	Returns an operation set from a csv file. Delimiters must be white
+	spaces.
+	'''
+	file_csv = csv.reader(open(file_name), delimiter = ' ')
+	file_matrix = []
+	for row in file_csv:
+		file_matrix.append(row)
+	order = len(file_matrix)
+
+	for row in file_matrix:
+		if len(row) != order:
+			raise ValueError('The csv file must form a square matrix')
+
+	_operation_list = []
+	for i in range(1, len(file_matrix)): 
+	    for j in range(1, len(file_matrix)):
+	        element = ((file_matrix[i][0], file_matrix[0][j]), file_matrix[i][j])
+	        _operation_list.append(element)
+
+	return set(_operation_list)
 
 class Pregroup:
 	'''
@@ -76,7 +100,9 @@ class Pregroup:
 		'''
 		Prints the pregroup table.
 		- string: is a string which represents the operation. Default is an asterisk
-		TO-DO: Fix spaces depending on how big the elements in the set are.
+		TO-DO: 
+		 - Fix spaces depending on how big the elements in the set are.
+		 - Perhaps use the readTable function in some way.
 		'''
 		print(str(string) +' | ', end='')
 		for element in self.Pregroup_set:

@@ -1,2 +1,4 @@
 # Ignoring some files in the commits
 *.pyc
+*.csv
+*.ipynb
