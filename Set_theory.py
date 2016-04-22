@@ -144,18 +144,19 @@ def getEquivalenceClass(_set, _relation, element):
 
 def getQuotientSet(_set, _relation):
 	'''
-	Returns the set of equivalence classes of the relation. Relation
-	must be of equivalence.
+	Returns the list of equivalence classes of the relation. Relation
+	must be of equivalence. It can't return a set, for set objects are
+	unhashable.
 	'''
 	if not isRelationEquivalence(_set, _relation):
 		raise ValueError('Relation must be of equivalence')
 
-	Quotient_set = set([])
+	Quotient_list = []
 	for element in _set:
 		Equivalence_class_of_element = getEquivalenceClass(_set, _relation, element)
-		Quotient_set.add(Equivalence_class_of_element)
+		Quotient_list.append(Equivalence_class_of_element)
 
-	return Quotient_set
+	return Quotient_list
 
 def isRelationOrder(_set, _relation):
 	'''
