@@ -1,5 +1,6 @@
 import Group_theory as GT
 import Set_theory as ST
+import csv
 
 '''
 TO-DO:
@@ -8,9 +9,9 @@ TO-DO:
 
 Z2 = GT.Group({0, 1}, {((0,0),0),((0,1),1),((1,0),1),((1,1),0)})
 
+# Manual testing
 _domain = {0,1}
 _codomain = {0,1,2}
-
 _relation_on_domain_codomain = {(0,1), (0,2), (1,1)}
 _not_a_relation_on_domain_codomain = {(2,1), (0,0)}
 _reflexive_relation_on_domain = {(0,0), (1,1), (0,1)}
@@ -28,7 +29,7 @@ _injective_function = {(0,1), (1,0)}
 _not_injective_function = {(0,0), (1,0)}
 _surjective_function = {(0,1), (1,0)}
 _not_surjective_function = {(0,0), (1,0)}
-
+Z5 = GT.getZn(5)
 
 def test_group_order_is_consistent():
 	assert Z2.getGroupOrder() == 2
@@ -38,6 +39,12 @@ def test_group_set_is_consistent():
 
 def test_Z2_is_abelian():
 	assert Z2.isGroupAbelian()
+
+def test_Z2s_module():
+	assert Z2.getModule() == 0
+
+def test_Z5s_inverse():
+	assert Z5.getInverse(3) == 2
 
 def test_is_relation():
 	assert ST.isRelation(_domain,_codomain,_relation_on_domain_codomain)
@@ -92,3 +99,17 @@ def test_is_not_surjective():
 
 def test_is_bijective():
 	assert ST.isFunctionBijective(_domain, _domain, _function)
+
+#CSV testing:
+def test_csv_works_on_functions():
+	A, B, f = ST.getFunctionFromCSV("function.csv")
+	assert ST.isRelationFunction(A, B, f)
+
+def test_csv_works_on_pregroups():
+	D3 = GT.getPregroupFromCSV("table_D_3.csv")
+
+def test_csv_works_on_groups():
+	D3 = GT.getGroupFromCSV("table_D_3.csv")
+	assert not D3.isGroupAbelian()
+
+

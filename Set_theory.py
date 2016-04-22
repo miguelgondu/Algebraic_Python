@@ -19,6 +19,7 @@ TO-DO:
   a relation.
 - Implement getQuotientSet of a relation.
 '''
+import csv
 
 def isRelation(domain, codomain, _relation):
 	'''
@@ -215,3 +216,56 @@ def isFunctionBijective(domain, codomain, _function):
 		return True
 
 	return False
+
+def getRelationFromCSV(file_name):
+	'''
+	Returns a 3-tuple: (domain, codomain, relation)
+	'''
+	file_csv = csv.reader(open(file_name), delimiter = ' ')
+	file_matrix = []
+	for row in file_csv:
+		file_matrix.append(row)
+		if len(row) != 2:
+			raise ValueError('File must contain a pair of elements per row')
+	_relation_list = []
+	_domain_list = []
+	_codomain_list = []
+	for row in file_matrix:
+		_domain_list.append(row[0])
+		_codomain_list.append(row[1])
+		element = (row[0], row[1])
+		_relation_list.append(element)
+
+	_domain = set(_domain_list)
+	_codomain = set(_codomain_list)
+	_relation = set(_relation_list)
+
+	return (_domain, _codomain, _relation)
+
+def getFunctionFromCSV(file_name):
+	'''
+	Returns a 3-tuple: (domain, codomain, function)
+	'''
+	file_csv = csv.reader(open(file_name), delimiter = ' ')
+	file_matrix = []
+	for row in file_csv:
+		file_matrix.append(row)
+		if len(row) != 2:
+			raise ValueError('File must contain a pair of elements per row')
+	_relation_list = []
+	_domain_list = []
+	_codomain_list = []
+	for row in file_matrix:
+		_domain_list.append(row[0])
+		_codomain_list.append(row[1])
+		element = (row[0], row[1])
+		_relation_list.append(element)
+
+	_domain = set(_domain_list)
+	_codomain = set(_codomain_list)
+	_relation = set(_relation_list)
+
+	if not isRelationFunction(_domain, _codomain, _relation):
+		raise ValueError('Relation is not a function')
+
+	return (_domain, _codomain, _relation)

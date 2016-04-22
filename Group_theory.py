@@ -10,8 +10,8 @@ In this file, the main objects of group theory are defined:
 For more information, check the documentation of each object.
 
 TO-DO:
- - Create a function that translates a csv file into an operation.
  - Create group actions.
+ - Implement getNonInversibleElements().
 '''
 
 import Set_theory as ST
@@ -26,6 +26,10 @@ class Pregroup:
 	and the operation is a set of tuples of the form ((a,b), c) which
 	implies a*b=c, the operation must have for every pair of elements of S
 	the value of their operation. Otherwise an error is raised.
+
+	There's an easier way of importing a Pregroup, and that is by
+	using the getPregroupFromCSV function, which takes as an argument
+	the name of a file which contains the table of the operation.
 
 
 	This class commes with functions that determine whether or not the 
@@ -182,7 +186,7 @@ class Pregroup:
 		that the module is unique), we get one element that satisfies
 		the definition.
 		'''
-		if self.isPregroupModulative(False):
+		if self.isPregroupModulative():
 			for element in self.Pregroup_set:
 				for _tuple in self.Pregroup_operation:
 					if _tuple[0][0] == element and _tuple[1] == element:
@@ -197,7 +201,7 @@ class Pregroup:
 		Returns a boolean: True if the Pregroup's operation is invertible
 		and False if the Pregroup's operation isn't. 
 		'''
-		if self.isPregroupModulative(False):
+		if self.isPregroupModulative():
 			List_of_inverses = []
 			e = self.getModule()
 			for element1 in self.Pregroup_set:
@@ -409,9 +413,9 @@ def getZn(n):
 	        _operation.append((_tuple, (element1+element2)% n))
 	return Group(_set, set(_operation))
 
-def getPregroupFromCSV(self, file_name):
+def getPregroupFromCSV(file_name):
 	'''
-	Returns an operation set from a csv file. Delimiters must be white
+	Returns a pregroup from a csv file. Delimiters must be white
 	spaces.
 	'''
 	file_csv = csv.reader(open(file_name), delimiter = ' ')
@@ -437,7 +441,10 @@ def getPregroupFromCSV(self, file_name):
 
 	return Pregroup(set(_domain_list), set(_operation_list))
 
-def getGroupFromCSV(self, file_name):
+def getGroupFromCSV(file_name):
+	'''
+	Returns a group from a csv file. Delimiters must be white spaces.
+	'''
 	_Pregroup = getPregroupFromCSV(file_name)
 	if _Pregroup.isPregroupGroup():
 		return Group(_Pregroup.getPregroupSet(), _Pregroup.getPregroupOperation())
