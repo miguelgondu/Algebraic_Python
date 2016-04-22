@@ -22,6 +22,8 @@ _antisymmetric_relation_on_domain = {(0,0), (0,1)}
 _not_an_antisymmetric_relation_on_domain = {(0,1), (1,0)}
 _transitive_relation_on_domain = {(0,0), (0,1), (1,0), (1,1)}
 _not_a_transitive_relation_on_domain = {(0,1), (1,0)}
+_equivalence_relation_on_domain = {(0,0), (1,1)}
+_quotient_list = [{0}, {1}]
 _function = {(0,0), (1,1)}
 _not_a_function1 = {(0,0), (0,1)}
 _not_a_function2 = {(0,0)}
@@ -75,6 +77,9 @@ def test_is_transitive_relation():
 
 def test_is_not_an_transitive_relation():
 	assert not ST.isRelationTransitive(_domain, _not_a_transitive_relation_on_domain)
+
+def test_quotient_set():
+	assert ST.getQuotientSet(_domain, _equivalence_relation_on_domain) == _quotient_list
 
 def test_is_function():
 	assert ST.isRelationFunction(_domain, _domain, _function)

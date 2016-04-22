@@ -134,11 +134,12 @@ def getEquivalenceClass(_set, _relation, element):
 	if not isRelationEquivalence(_set, _relation):
 		raise ValueError('Relation must be of equivalence')
 
+	Equivalence_class_of_element = set([])
 	for _tuple in _relation:
 		if _tuple[0] == element:
-				Equivalence_class_of_element.add(_tuple[1])
-			if _tuple[1] == element:
-				Equivalence_class_of_element.add(_tuple[0])
+			Equivalence_class_of_element.add(_tuple[1])
+		if _tuple[1] == element:
+			Equivalence_class_of_element.add(_tuple[0])
 
 	return Equivalence_class_of_element
 
@@ -154,7 +155,8 @@ def getQuotientSet(_set, _relation):
 	Quotient_list = []
 	for element in _set:
 		Equivalence_class_of_element = getEquivalenceClass(_set, _relation, element)
-		Quotient_list.append(Equivalence_class_of_element)
+		if Equivalence_class_of_element not in Quotient_list:
+			Quotient_list.append(Equivalence_class_of_element)
 
 	return Quotient_list
 
