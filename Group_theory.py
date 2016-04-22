@@ -31,10 +31,8 @@ class Pregroup:
 	using the getPregroupFromCSV function, which takes as an argument
 	the name of a file which contains the table of the operation.
 
-
 	This class commes with functions that determine whether or not the 
-	operation is associative, modulative or invertive. (These last two
-	are not yet included, and they are a TO-DO)
+	operation is associative, modulative or invertive.
 	'''
 
 	def __init__(self, _set, _operation):
@@ -145,10 +143,6 @@ class Pregroup:
 		'''
 		Returns a boolean: True if the Pregroup is modulative and
 		False if the pregroup isn't.
-
-		To check whether a pregroup is modulative or not, we verify that
-		there exists an element that leaves others unchanged and that said
-		element works for every element in the set.
 
 		-Printing_flag: is a boolean that determines whether the module
 		is printed on-screen.
@@ -318,9 +312,7 @@ class Group:
 		Returns the result of operating a and b in that order. The
 		elements a and b must belong to the group.
 		'''
-		if a in self.Group_set and b in self.Group_set:
-			pass
-		else:
+		if a  not in self.Group_set or b not in self.Group_set:
 			raise ValueError('Objects must belong to the group.')
 			
 		for _tuple in self.Group_operation:

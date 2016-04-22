@@ -101,6 +101,10 @@ def test_is_bijective():
 	assert ST.isFunctionBijective(_domain, _domain, _function)
 
 #CSV testing:
+def test_csv_not_a_function():
+	A, B, f = ST.getRelationFromCSV("relation_not_a_function.csv")
+	assert not ST.isRelationFunction(A, B, f)
+
 def test_csv_works_on_functions():
 	A, B, f = ST.getFunctionFromCSV("function.csv")
 	assert ST.isRelationFunction(A, B, f)

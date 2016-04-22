@@ -13,11 +13,16 @@ different sets. We focus on determing whether a relation in a set
 is of order, or of equivalence.
 
 TO-DO:
-- Organize the returns so that it's more legible.
+- Organize the returns so that they result more legible.
+- The work with lists is useless, we could always work with sets using
+  emptyset = set([]) and replacing .append with .add.
 - If _relation is empty, everything should hold up, but will it?
-- Implement a function that return the minimal domain (codomain) of
+- Implement a function that returns the minimal domain (codomain) of
   a relation.
-- Implement getQuotientSet of a relation.
+- Implement getQuotientSet of an equivalence relation.
+- There's much to do with orders: get minimals, maximals, lower bounds
+  upper bounds, ...
+- Implement getHasseDiagram of an order relation.
 '''
 import csv
 
@@ -120,6 +125,37 @@ def isRelationEquivalence(_set, _relation):
 				return True
 
 	return False
+
+def getEquivalenceClass(_set, _relation, element):
+	'''
+	Returns the equivalence class of the element. Relation
+	must be of equivalence.
+	'''
+	if not isRelationEquivalence(_set, _relation):
+		raise ValueError('Relation must be of equivalence')
+
+	for _tuple in _relation:
+		if _tuple[0] == element:
+				Equivalence_class_of_element.add(_tuple[1])
+			if _tuple[1] == element:
+				Equivalence_class_of_element.add(_tuple[0])
+
+	return Equivalence_class_of_element
+
+def getQuotientSet(_set, _relation):
+	'''
+	Returns the set of equivalence classes of the relation. Relation
+	must be of equivalence.
+	'''
+	if not isRelationEquivalence(_set, _relation):
+		raise ValueError('Relation must be of equivalence')
+
+	Quotient_set = set([])
+	for element in _set:
+		Equivalence_class_of_element = getEquivalenceClass(_set, _relation, element)
+		Quotient_set.add(Equivalence_class_of_element)
+
+	return Quotient_set
 
 def isRelationOrder(_set, _relation):
 	'''
