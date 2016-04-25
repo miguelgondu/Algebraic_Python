@@ -40,7 +40,7 @@ class Pregroup:
 		self.Pregroup_operation = _operation
 
 		# Checking if arguments are indeed a sets
-		if type(self.Pregroup_set) != type({0,1}) or type(self.Pregroup_operation) != type({0,1}):
+		if type(self.Pregroup_set) != set or type(self.Pregroup_operation) != set:
 			raise ValueError('Both arguments should be sets.')
 
 		# Checking if the operation is correctly defined
@@ -87,7 +87,7 @@ class Pregroup:
 		- string: is a string which represents the operation. Default is an asterisk
 		TO-DO: 
 		 - Fix spaces depending on how big the elements in the set are.
-		 - Perhaps use the readTable function in some way.
+		 - Perhaps use the getTable functions in some way.
 		'''
 		print(str(string) +' | ', end='')
 		for element in self.Pregroup_set:
@@ -281,7 +281,7 @@ class Group:
 		self.Group_set = _set
 		self.Group_operation = _operation
 
-		if type(self.Group_set) != type({0,1}) or type(self.Group_operation) != type({0,1}):
+		if type(self.Group_set) != set or type(self.Group_operation) != set:
 			raise ValueError('Both arguments should be sets.')
 
 		G = Pregroup(_set, _operation)

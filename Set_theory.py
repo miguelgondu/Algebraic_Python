@@ -31,17 +31,17 @@ def isRelation(domain, codomain, _relation):
 	Returns a boolean: True if relation is well defined, False otherwise.
 	'''
 	# Sanity check
-	if type(_relation) != type({0,1}):
+	if type(_relation) != set:
 		raise ValueError('Relation must be a set.')
 
-	if type(domain) != type({0,1}):
+	if type(domain) != set:
 		raise ValueError('Domain must be a set.')
 
-	if type(codomain) != type({0,1}):
+	if type(codomain) != set:
 		raise ValueError('Codomain must be a set.')
 
 	for _tuple in _relation:
-		if type(_tuple) != type((0,1)):
+		if type(_tuple) != tuple:
 			raise ValueError('Relation must contain 2-tuples')
 
 	# Checking whether every tuple in the relation is defined on AxB
