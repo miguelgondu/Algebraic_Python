@@ -51,6 +51,47 @@ def isRelation(domain, codomain, _relation):
 
 	return True
 
+def getDomainOfRelation(_relation):
+	'''
+	Returns the (minimal) domain of a given relation.
+	'''
+	_domain_list = []
+	for _tuple in _relation:
+		_domain_list.append(_tuple[0])
+
+	return set(_domain_list)
+
+def getRangeOfRelation(_relation):
+	'''
+	Returns the range of a given relation.
+	'''
+	_range_list = []
+	for _tuple in _relation:
+		_range_list.append(_tuple[1])
+
+	return set(_range_list)
+
+def getCompositionOfRelations(_relation1, _relation2):
+	'''
+	Returns the composition of the first argument and the second.
+	The range of the first one must be contained in the domain of the
+	second.
+	'''
+	_domain1 = getDomainOfRelation(_relation1)
+	_range1 = getRangeOfRelation(_relation1)
+	_domain2 = getDomainOfRelation(_relation2)
+
+	if not _range1 <= _domain2:
+		raise ValueError('The compsition cannot be made')
+
+	_composition_list = []
+	for _tuple1 in _relation1:
+		for _tuple2 in _relation2:
+			if _tuple1[1] == _tuple2[0]:
+				_composition_list.append((_tuple1[0], _tuple2[1]))
+
+	return set(_composition_list)
+
 
 def isRelationReflexive(_set, _relation):
 	'''
@@ -174,6 +215,31 @@ def isRelationOrder(_set, _relation):
 
 	return False
 
+def getRelationFromCSV(file_name):
+	'''
+	Returns a 3-tuple: (domain, codomain, relation)
+	'''
+	file_csv = csv.reader(open(file_name), delimiter = ' ')
+	file_matrix = []
+	for row in file_csv:
+		file_matrix.append(row)
+		if len(row) != 2:
+			raise ValueError('File must contain a pair of elements per row')
+	_relation_list = []
+	_domain_list = []
+	_codomain_list = []
+	for row in file_matrix:
+		_domain_list.append(row[0])
+		_codomain_list.append(row[1])
+		element = (row[0], row[1])
+		_relation_list.append(element)
+
+	_domain = set(_domain_list)
+	_codomain = set(_codomain_list)
+	_relation = set(_relation_list)
+
+	return (_domain, _codomain, _relation)
+
 '''
 Work with finite functions:
 we determine whether a function is injective, surjective or bijective.
@@ -198,6 +264,32 @@ def isRelationFunction(domain, codomain, _relation):
 			return False
 
 	return True
+
+def getDomainOfFunction(_function):
+	'''
+	Returns the domain of a given function.
+	'''
+	_domain_list = []
+	for _tuple in _function:
+		_domain_list.append(_tuple[0])
+
+	return set(_domain_list)
+
+def getRangeOfFunction(_function):
+	'''
+	Returns the range of a given function.
+	'''
+	_range_list = []
+	for _tuple in _function:
+		_range_list.append(_tuple[1])
+
+	return set(_range_list)
+
+def getCompositionOfFunctions(_function1, _function2):
+	'''
+	Returns the composition of the functions.
+	'''
+	return getCompositionOfRelations(_function1, _function2)
 
 def isFunctionInjective(domain, codomain, _function):
 	'''
@@ -256,41 +348,18 @@ def isFunctionBijective(domain, codomain, _function):
 
 	return False
 
-def getRelationFromCSV(file_name):
-	'''
-	Returns a 3-tuple: (domain, codomain, relation)
-	'''
-	file_csv = csv.reader(open(file_name), delimiter = ' ')
-	file_matrix = []
-	for row in file_csv:
-		file_matrix.append(row)
-		if len(row) != 2:
-			raise ValueError('File must contain a pair of elements per row')
-	_relation_list = []
-	_domain_list = []
-	_codomain_list = []
-	for row in file_matrix:
-		_domain_list.append(row[0])
-		_codomain_list.append(row[1])
-		element = (row[0], row[1])
-		_relation_list.append(element)
-
-	_domain = set(_domain_list)
-	_codomain = set(_codomain_list)
-	_relation = set(_relation_list)
-
-	return (_domain, _codomain, _relation)
-
 def getFunctionFromCSV(file_name):
 	'''
 	Returns a 3-tuple: (domain, codomain, function)
 	'''
 	file_csv = csv.reader(open(file_name), delimiter = ' ')
 	file_matrix = []
+
 	for row in file_csv:
 		file_matrix.append(row)
 		if len(row) != 2:
 			raise ValueError('File must contain a pair of elements per row')
+
 	_relation_list = []
 	_domain_list = []
 	_codomain_list = []

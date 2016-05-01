@@ -472,3 +472,4 @@ def getGroupFromCSV(file_name):
 	_Pregroup = getPregroupFromCSV(file_name)
 	if _Pregroup.isPregroupGroup():
 		return Group(_Pregroup.getPregroupSet(), _Pregroup.getPregroupOperation())
+
