@@ -230,6 +230,7 @@ class Pregroup:
 		'''
 		TODO:
 		- What if there's a set with only a couple invertible elements?
+		  Implement a getInversibleElements() function.
 		'''
 		if element not in self.Pregroup_set:
 			raise ValueError('Element is not in group')
@@ -418,9 +419,9 @@ class Group:
 
 		return Subgroup
 
-#Other functions
+# Other functions
 
-#Creating a Zn
+# Creating a Zn
 
 def getZn(n):
 	'''
