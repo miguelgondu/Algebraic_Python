@@ -19,12 +19,38 @@ TO-DO:
 - If _relation is empty, everything should hold up, but will it?
 - Implement a function that returns the minimal domain (codomain) of
   a relation.
-- Implement getQuotientSet of an equivalence relation.
 - There's much to do with orders: get minimals, maximals, lower bounds
   upper bounds, ...
 - Implement getHasseDiagram of an order relation.
 '''
 import csv
+from itertools import chain, combinations
+
+'''
+Work with sets in general:
+'''
+
+def getPowerSet(_set):
+	'''
+	Returns a list with the power set of a given set. Taken
+	in part from the recipies in itertools' webpage: 
+	https://docs.python.org/2/library/itertools.html#recipes
+	'''
+	if type(_set) != set:
+		raise ValueError('Argument must be a set')
+
+	s = list(_set)
+	_powerset = chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
+	powerset = []
+	for element in set(_powerset):
+		powerset.append(set(element))
+
+	return powerset
+
+
+'''
+Work with Relations:
+'''
 
 def isRelation(domain, codomain, _relation):
 	'''
