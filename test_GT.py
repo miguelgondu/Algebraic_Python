@@ -33,6 +33,14 @@ _surjective_function = {(0,1), (1,0)}
 _not_surjective_function = {(0,0), (1,0)}
 Z5 = GT.getZn(5)
 
+## Composition test related stuff:
+_set1 = {'a', 'b', 'c'}
+_set2 = {1, 2, 3, 4}
+_set3 = {'x', 'y', 'z'}
+_function_for_comp_1 = {('a',1), ('b', 3), ('c', 4)}
+_function_for_comp_2 = {(1,'x'), (2, 'y'), (3, 'z'), (4, 'x')}
+_result_of_comp = {('a', 'x'), ('b', 'z'), ('c', 'x')}
+
 def test_group_order_is_consistent():
 	assert Z2.getGroupOrder() == 2
 
@@ -96,29 +104,38 @@ def test_is_injective():
 def test_is_not_injective():
 	assert not ST.isFunctionInjective(_domain, _domain, _not_injective_function)
 
+def test_is_not_injective2():
+	assert not ST.isFunctionInjective(_set2, _set3, _function_for_comp_2)
+
 def test_is_surjective():
 	assert ST.isFunctionSurjective(_domain, _domain, _surjective_function)
 
 def test_is_not_surjective():
 	assert not ST.isFunctionSurjective(_domain, _domain, _not_surjective_function)
 
+def test_is_not_surjective2():
+	assert not ST.isFunctionSurjective(_set1, _set2, _function_for_comp_1)
+
 def test_is_bijective():
 	assert ST.isFunctionBijective(_domain, _domain, _function)
 
+def test_composition_is_consistent():
+	assert _result_of_comp == ST.getCompositionOfFunctions(_function_for_comp_1, _function_for_comp_2)
+
 #CSV testing:
-def test_csv_not_a_function():
-	A, B, f = ST.getRelationFromCSV("relation_not_a_function.csv")
-	assert not ST.isRelationFunction(A, B, f)
+#def test_csv_not_a_function():
+#	A, B, f = ST.getRelationFromCSV("relation_not_a_function.csv")
+#	assert not ST.isRelationFunction(A, B, f)
 
-def test_csv_works_on_functions():
-	A, B, f = ST.getFunctionFromCSV("function.csv")
-	assert ST.isRelationFunction(A, B, f)
+#def test_csv_works_on_functions():
+#	A, B, f = ST.getFunctionFromCSV("function.csv")
+#	assert ST.isRelationFunction(A, B, f)
 
-def test_csv_works_on_pregroups():
-	D3 = GT.getPregroupFromCSV("table_D_3.csv")
+#def test_csv_works_on_pregroups():
+#	D3 = GT.getPregroupFromCSV("table_D_3.csv")
 
-def test_csv_works_on_groups():
-	D3 = GT.getGroupFromCSV("table_D_3.csv")
-	assert not D3.isGroupAbelian()
+#def test_csv_works_on_groups():
+#	D3 = GT.getGroupFromCSV("table_D_3.csv")
+#	assert not D3.isGroupAbelian()
 
 

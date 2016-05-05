@@ -289,6 +289,17 @@ def getCompositionOfFunctions(_function1, _function2):
 	'''
 	Returns the composition of the functions.
 	'''
+	_domain1 = getDomainOfFunction(_function1)
+	_range1 = getRangeOfFunction(_function1)
+	_domain2 = getDomainOfFunction(_function2)
+	_range2 = getRangeOfFunction(_function2)
+
+	if not isRelationFunction(_domain1, _range1, _function1):
+		raise ValueError('First argument is not a function')
+
+	if not isRelationFunction(_domain2, _range2, _function2):
+		raise ValueError('Second argument is not a function')
+
 	return getCompositionOfRelations(_function1, _function2)
 
 def isFunctionInjective(domain, codomain, _function):
