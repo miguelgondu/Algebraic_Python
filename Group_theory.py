@@ -229,7 +229,7 @@ class Pregroup:
 
 		'''
 		TODO:
-		- What if there's a set with only a couple invertible elements?
+		- What if there's a group with only a couple invertible elements?
 		  Implement a getInversibleElements() function.
 		'''
 		if element not in self.Pregroup_set:
