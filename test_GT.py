@@ -123,6 +123,7 @@ def test_composition_is_consistent():
 	assert _result_of_comp == ST.getCompositionOfFunctions(_function_for_comp_1, _function_for_comp_2)
 
 #CSV testing:
+#To test these, you need to create the corresponding csv file.
 #def test_csv_not_a_function():
 #	A, B, f = ST.getRelationFromCSV("relation_not_a_function.csv")
 #	assert not ST.isRelationFunction(A, B, f)

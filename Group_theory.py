@@ -181,6 +181,10 @@ class Pregroup:
 		modulative, once it is modulative (and because we know a-priori
 		that the module is unique), we get one element that satisfies
 		the definition.
+
+		To-Do: the module is unique only if the operation is associative,
+		we should then change the way of implementing this function:
+		perhaps getSetOfModules?
 		'''
 		if self.isPregroupModulative():
 			for element in self.Pregroup_set:
@@ -192,32 +196,48 @@ class Pregroup:
 		else:
 			raise RuntimeError('Pregroup is not modulative')
 
+	def isElementInvertible(self, element):
+		'''
+		Returns a boolean: true if given element is inversible and
+		false otherwise
+
+		To-Do: 
+			-test it
+			-all of this assumes that the operation is associative
+			 because, otherwise, the identity element must not be unique.
+			 Think of a way of reimplementing it.
+		'''
+		if element in self.Pregroup_set:
+			if self.isPregroupModulative:
+				e = self.getModule()
+				for _tuple in self.Pregroup_operation:
+					if _tuple[0][0] == element and _tuple[1] == e:
+						left_inverse = _tuple[0][1]
+					if _tuple[0][1] == element and _tuple[1] == e:
+						right_inverse = _tuple[0][0]
+					if left_inverse == right_inverse:
+						return True
+					else:
+						return False
+			else:
+				raise ValueError('Pregroup is not modulative')
+		else:
+			raise ValueError('element must belong to the Pregroup')
+
 	def isPregroupInvertible(self):
 		'''
 		Returns a boolean: True if the Pregroup's operation is invertible
-		and False if the Pregroup's operation isn't. 
+		and False if the Pregroup's operation isn't.
+		To-Do:
+			-test it
 		'''
 		if self.isPregroupModulative():
-			List_of_inverses = []
-			e = self.getModule()
-			for element1 in self.Pregroup_set:
-				for element2 in self.Pregroup_set:
-					if self.operate(element1, element2) == e:
-						List_of_inverses.append((element1, element2))
-
-			Not_inversible_element_flag = False
 			for element in self.Pregroup_set:
-				appearences_of_element = 0
-				for _tuple in List_of_inverses:
-					if _tuple[0] == element or _tuple[1] == element:
-						appearences_of_element += 1
-				if appearences_of_element == 0:
-					Not_inversible_element_flag = True
-					
-			return not Not_inversible_element_flag
+				if not self.isElementInvertible(element):
+					return False
+			return True
 		else:
-			print('The pregroup is not even modulative')
-			return False
+			raise ValueError('Pregroup is not modulative')
 
 	def getInverse(self, element):
 		'''
@@ -226,25 +246,18 @@ class Pregroup:
 		This functions creates the set of inverses and gets one of the
 		inverses (which, by our theory, should be unique).
 		'''
-
-		'''
-		TODO:
-		- What if there's a group with only a couple invertible elements?
-		  Implement a getInversibleElements() function.
-		'''
 		if element not in self.Pregroup_set:
 			raise ValueError('Element is not in group')
 
-		if self.isPregroupInvertible():
-			List_of_inverses = []
+		if self.isElementInvertible(element):
 			e = self.getModule()
-			for element1 in self.Pregroup_set:
-				for element2 in self.Pregroup_set:
-					if self.operate(element1, element2) == e:
-						List_of_inverses.append((element1, element2))
-			for _tuple in List_of_inverses:
-				if _tuple[0] == element:
-					return _tuple[1]
+			for _tuple in self.Pregroup_operation:
+				if _tuple[0][0] == element and _tuple[1] == e:
+					left_inverse = _tuple[0][1]
+				if _tuple[0][1] == element and _tuple[1] == e:
+					right_inverse = _tuple[0][0]
+				if left_inverse == right_inverse:
+					return left_inverse
 		else:
 			raise RuntimeError('Pregroup is not invertible')
 
