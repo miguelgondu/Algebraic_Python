@@ -1,28 +1,11 @@
 '''
-Set_theory.py, by MGD.
+Set_theory.py, by MGD. Written in python 3.
 
 This library divides itself in two main parts:
  - Work with relations.
  - Work with finite functions.
 '''
 
-'''
-Work with relations:
-there's little to do with relations defined on AxB with A and B
-different sets. We focus on determing whether a relation in a set
-is of order, or of equivalence.
-
-TO-DO:
-- Organize the returns so that they result more legible.
-- The work with lists is useless, we could always work with sets using
-  emptyset = set([]) and replacing .append with .add.
-- If _relation is empty, everything should hold up, but will it?
-- Implement a function that returns the minimal domain (codomain) of
-  a relation.
-- There's much to do with orders: get minimals, maximals, lower bounds
-  upper bounds, ...
-- Implement getHasseDiagram of an order relation.
-'''
 import csv
 from itertools import chain, combinations
 
@@ -47,9 +30,22 @@ def getPowerSet(_set):
 
 	return powerset
 
-
 '''
-Work with Relations:
+Work with relations:
+there's little to do with relations defined on AxB with A and B
+different sets. We focus on determing whether a relation in a set
+is an order, or an equivalence.
+
+TO-DO:
+- Organize the returns so that they result more legible.
+- The work with lists is useless, we could always work with sets using
+  emptyset = set([]) and replacing .append with .add.
+- If _relation is empty, everything should hold up, but will it?
+- Implement a function that returns the minimal domain (codomain) of
+  a relation.
+- There's much to do with orders: get minimals, maximals, lower bounds
+  upper bounds, ...
+- Implement getHasseDiagram of an order relation.
 '''
 
 def isRelation(domain, codomain, _relation):

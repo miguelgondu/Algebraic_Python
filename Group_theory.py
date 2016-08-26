@@ -1,5 +1,5 @@
 '''
-Group_theory.py, by MGD.
+Group_theory.py, by MGD. Written in python3.
 
 In this file, the main objects of group theory are defined:
 - A pregroup is a set with an operation, said operation may not even be
