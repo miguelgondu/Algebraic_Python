@@ -68,7 +68,7 @@ def video_maker(video_name, X, Y, axis_limit, initial_time, final_time, step, cu
     figure_counter = 0
     time = initial_time
     empty, video_title = curve(float(time))
-    while t <= final_time:
+    while time <= final_time:
         plt.figure()
         A, empty2 = curve(float(time))
         U, V = LeftMultiplication(A, X, Y)
