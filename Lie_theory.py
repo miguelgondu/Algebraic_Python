@@ -5,32 +5,34 @@ Up to this point, this module will contain implementation of some
 algorithms related to matrix Lie theory and matrix curve visualization
 in 2 dimensions.
 
-This module relies heavily on numpy, scipy.linalg, matplotlib and
-ffmpeg. Make sure to have them installed.
+This module relies heavily on numpy, matplotlib and ffmpeg. Make
+sure to have them installed.
+
+TO-DO:
+    -test this section.
 '''
 import numpy as np
-import scipy.linalg as linalg
 import math
 import matplotlib.pyplot as plt
 
 def LeftMultiplication(A,X,Y):
-	'''
-	Given X and Y coming from an np.mgrid, LeftMultiplication returns
-	the x coordinates U and the Y coordinates V of what results after
-	multiplying the points (x;y) in the X,Y mgrid by A. That is, this
-	function returns A*(x;y).
-	
-	A must be a 2x2 matrix, and X and Y must come from the same mgrid.
+    '''
+    Given X and Y coming from an np.mgrid, LeftMultiplication returns
+    the x coordinates U and the Y coordinates V of what results after
+    multiplying the points (x;y) in the X,Y mgrid by A. That is, this
+    function returns A*(x;y).
+    
+    A must be a 2x2 matrix, and X and Y must come from the same mgrid.
 
-	Example: the snippet
+    Example: the snippet
 
-		A = np.eye(2)
-		X, Y = np.mgrid[-4:5,-4:5]
-		U, V = LeftMultiplication(A,X,Y)
+        A = np.eye(2)
+        X, Y = np.mgrid[-4:5,-4:5]
+        U, V = LeftMultiplication(A,X,Y)
 
-	returns U == X and Y == V, because A is precisely the identity.
+    returns U == X and Y == V, because A is precisely the identity.
 
-	'''
+    '''
     if np.shape(X) != np.shape(Y):
         raise ValueError('X and Y must come from the same np.mgrid')
     U, V = X.copy(), Y.copy()
@@ -45,23 +47,23 @@ def LeftMultiplication(A,X,Y):
 
 def video_maker(video_name, X, Y, axis_limit, initial_time, final_time, step, curve):
     '''
-	video_maker is a script which creates a video of a matrix curve.
+    video_maker is a script which creates a video of a matrix curve.
 
-	video_name: a string, the resulting video will be named [video_name].mp4
-	X,Y: the result of an np.mgrid
-	axis_limit: a positive float, the video will be a rectangle that
-	measures -axis_limit times axis_limit in each axis.
-	initial_time: the first value for t, where c(t) is the curve.
-	final_time: the last value for t, where c(t) is the curve.
-	step: the amount of time to be added in between each frame.
-	curve: a matrix function c(t) which outputs two things: a matrix which
-	depends on t, and a string that will go on the video's title.
+    video_name: a string, the resulting video will be named [video_name].mp4
+    X,Y: the result of an np.mgrid
+    axis_limit: a positive float, the video will be a rectangle that
+    measures -axis_limit times axis_limit in each axis.
+    initial_time: the first value for t, where c(t) is the curve.
+    final_time: the last value for t, where c(t) is the curve.
+    step: the amount of time to be added in between each frame.
+    curve: a matrix function c(t) which outputs two things: a matrix which
+    depends on t, and a string that will go on the video's title.
 
-	An example of a curve that could go in the parameters is:
-	def c(t):
-		return np.matrix([[t, t**2], [1, 2*t]]), 'A = [t, t**2;1,2t]'
+    An example of a curve that could go in the parameters is:
+    def c(t):
+        return np.matrix([[t, t**2], [1, 2*t]]), 'A = [t, t**2;1,2t]'
 
-	Thus, in the title would be the string 'A = [t, t**2;1,2t]'.
+    Thus, in the title would be the string 'A = [t, t**2;1,2t]'.
     '''
     figure_counter = 0
     time = initial_time
@@ -81,27 +83,27 @@ def video_maker(video_name, X, Y, axis_limit, initial_time, final_time, step, cu
     os.system("rm *.png")
 
 def matrix_exp_taylor(A, steps=10):
-	'''
-	An implementation of the exponential of a matrix using re-scaling and
-	its definition as a Taylor series. 
-	'''
-    j = 0
-    while np.linalg.norm((1/(2 ** j))*A) > 1:
-        j += 1
+    '''
+    An implementation of the exponential of a matrix using re-scaling and
+    its definition as a Taylor series. 
+    '''
+    counter_of_rescaling = 0
+    while np.linalg.norm((1/(2 ** counter_of_rescaling))*A) > 1:
+        counter_of_rescaling += 1
     Sum = 0
     for k in range(0,steps):
         c = 1/math.factorial(k)
-        Sum += float(c)*(((1/(2 ** j))*A)** k)
-    while j >= 1:
+        Sum += float(c)*(((1/(2 ** counter_of_rescaling))*A)** k)
+    while counter_of_rescaling >= 1:
         Sum = Sum*Sum
-        j -= 1
+        counter_of_rescaling -= 1
     return Sum
 
 def Pade_approximation(A, p, q):
-	'''
-	An implementation of Pade's approximation to the exponential of a
-	matrix
-	'''
+    '''
+    An implementation of Pade's approximation to the exponential of a
+    matrix
+    '''
     D = 0
     for j in range(0,q):
         D += ((math.factorial(p+q-j)*math.factorial(q))/(math.factorial(p+q)*math.factorial(j)*math.factorial(q-j)))*(-A)**j
@@ -111,10 +113,10 @@ def Pade_approximation(A, p, q):
     return np.dot(np.linalg.inv(D), N)
 
 def matrix_exp_pade(A, q=4):
-	'''
-	An implementation of the matrix exponential combining Pade's
-	approximation and rescaling.
-	'''
+    '''
+    An implementation of the matrix exponential combining Pade's
+    approximation and rescaling.
+    '''
     rescaled_A = A.copy()
     counter_of_rescaling = 0
     while np.linalg.norm(rescaled_A) > 1 and counter_of_rescaling < 10:

@@ -1,5 +1,7 @@
 import Group_theory as GT
 import Set_theory as ST
+import Lie_theory as LT
+import numpy as np
 import csv
 
 '''
@@ -139,4 +141,9 @@ def test_composition_is_consistent():
 #	D3 = GT.getGroupFromCSV("table_D_3.csv")
 #	assert not D3.isGroupAbelian()
 
-
+#Lie testing:
+A = np.matrix('1,0;0,1')
+X, Y = np.mgrid[-4:5, -4:5]
+U, V = LT.LeftMultiplication(A, X, Y)
+def test_is_left_multiplication_consistent():
+	assert U.all() == X.all() and V.all() == Y.all()
